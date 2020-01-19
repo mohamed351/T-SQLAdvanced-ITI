@@ -29,6 +29,44 @@ inner join Stud_Course as stuCourse
 on stuCourse.St_Id = student.St_Id
 inner join Course as cou 
 on cou.Crs_Id = stuCourse.Crs_Id
+/*
+6.	Display number of courses for each topic name
+*/
+select  Course.Crs_Name, SUM( Topic.Top_Id) AS [Topic Number]   from Topic inner join Course
+on Topic.Top_Id = Course.Top_Id
+GROUP by Course.Crs_Name
+/*
+7.	Display max and min salary for instructors
+*/
+select MAX(Salary) as [The Max Salary], MIN(Salary) as [The Min Salary] from Instructor
+/*
+8.	Display instructors who have salaries less 
+than the average salary of all instructors.
+*/
+Select  * from Instructor
+where Salary < (select AVG(ISNULL(Salary,0)) from Instructor)
+
+/*
+9.	Display the Department name that contains the 
+instructor who receives the minimum salary.
+*/
+Select top(1) * from Department as dept  inner join Instructor as inst
+on dept.Dept_Id = inst.Dept_Id
+where Salary is not null	
+order by Salary
+/*
+10.	 Select max two salaries in instructor table. 
+*/
+select top(2) * from Instructor
+where Salary is not null	
+order by Salary desc
+
+
+
+
+
+
+
 
 
 

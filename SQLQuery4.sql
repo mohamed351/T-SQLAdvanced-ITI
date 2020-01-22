@@ -103,18 +103,93 @@ Go
 tables [User ID, Transaction Amount]
 */
 --Create 2 tables
-Create table Transaction1(
+Create table DailyTransaction(
 UserID int ,
 TransactionAmount decimal(9,2)
 )
 go 
-Create table Transaction2(
+Create table LastTransaction(
 UserID int ,
 TransactionAmount decimal(9,2)
 )
 Go
-Insert into Transaction1 values (1, 1000),(2,2000),(3,1000)
-go
-Insert into Transaction2 values (1, 4000), (4,2000), (2,10000)
+Insert into DailyTransaction values (1, 1000),(2,2000),(3,1000)
+Insert into LastTransaction values (1, 4000), (4,2000), (2,10000)
 Go
-Merge 
+/*
+MERGE <target_table> [AS TARGET]
+USING <table_source> [AS SOURCE]
+ON <search_condition>
+[WHEN MATCHED 
+   THEN <merge_matched> ]
+[WHEN NOT MATCHED [BY TARGET]
+   THEN <merge_not_matched> ]
+[WHEN NOT MATCHED BY SOURCE
+   THEN <merge_matched> ];
+*/ 
+Merge  LastTransaction as Target 
+using  DailyTransaction as Source 
+on target.UserID = source.UserID and target.TransactionAmount = source.TransactionAmount
+when not matched 
+then Insert  values(UserID,TransactionAmount);
+GO
+Select * from DailyTransaction
+GO
+Select * from [Human Resource].Employees
+GO
+/*
+10.	Write a query to select the highest two salaries in Each Department for instructors who have salaries.
+ “using one of Ranking Functions”
+*/
+Select * from 
+(
+Select  *,ROW_NUMBER() over (Order by Salary desc) AS Rank from [Human Resource].Employees 
+)as NewTbl
+where Rank <=2
+/*
+Write a query to select a random  student from each department. 
+ “using one of Ranking Functions”
+*/
+
+Select top(1) *, ROW_NUMBER()over(Order by newID()) from [Human Resource].Employees 
+
+/*Part2:use CompanySD23 DB*/
+Go
+Create view v_clerk 
+as
+Select work.ProjectNo, emp.EmpNo, work.Enter_Date as HireDate , work.Job from [Human Resource].Employees as emp
+inner join Works_On as work 
+on emp.EmpNo = work.EmpNo
+where work.Job = 'Clerk'
+with check option
+select * from v_clerk
+
+/*
+2)	 Create view named  “v_without_budget” 
+that will display all the projects data 
+without budget
+*/
+Go
+Create view v_without_budget
+as
+select ProjectNo,ProjectName from Company.Project
+go 
+Select * from v_without_budget
+/*
+3)	Create view named  “v_count “ that will display 
+the project name and the # of jobs in it
+*/
+Go
+Create view v_count 
+as 
+Select ProjectName, count(work.Job) as ANumberOfEmployees from Company.Project as pro
+inner join Works_On as work 
+on pro.ProjectNo = work.ProjectNo
+group by ProjectName
+Go
+
+/*
+5)	modifey the view named  “v_without_budget”  to display all DATA in project p1 and p2 
+*/
+
+

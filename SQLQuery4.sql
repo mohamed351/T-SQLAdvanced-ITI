@@ -202,11 +202,56 @@ Go
 */
 drop view v_clerk 
 drop view v_count 
-
+/*
+7)	Create view that will display the emp# and
+ emp lastname who works on dept# is ‘d2’
+*/
+Go
+Create view DisplayEmployees
+as
+Select emp.DepatNo, emp.EmpNo, emp.EmpFname ,emp.EmpLname from [Human Resource].Employees as emp
 
 /*
-v_without_budget”  
+
+/*
+8)	Display the employee  lastname that contains letter “J”
 */
+ 
+*/
+Go
+Create view DisplayEmployees2
+AS 
+Select * from [Human Resource].Employees as emp
+where emp.EmpLname like '%j%'
+GO
+/*
+9)	Create view named “v_dept” that will display the department# and department name*/
+Create view v_depart
+as 
+Select Department.DeptNo, Department.DeptName  from Company.Department
+Go
+/*
+10)	using the previous view try enter new department data where dept# is ’d4’ and dept name is ‘Development’
+*/
+Insert Into v_depart values(1,'Mohamed');
+go 
+/*
+11)	Create view name “v_2006_check” that will 
+display employee#, the project #where he works and the 
+date of joining the project which must be from the first of 
+January and the last of December 2006.this view will be used 
+to insert data so make sure that the coming new data must match the condition
+*/
+Create view v_2006_check
+as 
+Select work.EmpNo  , work.ProjectNo , work.Enter_Date  from Works_On as work
+where work.Enter_Date  between '2006/1/1' and '2006/12/31'
+go 
+
+
+
+
+
 
 
 

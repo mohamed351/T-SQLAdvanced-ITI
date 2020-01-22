@@ -187,9 +187,26 @@ inner join Works_On as work
 on pro.ProjectNo = work.ProjectNo
 group by ProjectName
 Go
+--4
+/*
+5)	modifey the view named  “v_without_budget”
+to display all DATA in project p1 and p2 
+*/
+
+Alter view v_without_budget
+as 
+Select * from Company.Project
+Go
+/*
+6)	Delete the views  “v_ clerk” and “v_count”
+*/
+drop view v_clerk 
+drop view v_count 
+
 
 /*
-5)	modifey the view named  “v_without_budget”  to display all DATA in project p1 and p2 
+v_without_budget”  
 */
+
 
 

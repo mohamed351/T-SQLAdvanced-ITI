@@ -43,7 +43,7 @@ inner join Department as dept
 on instruct.Dept_Id = dept.Dept_Id
 go 
 /*
-1.	 Create a view “V1” that displays student data for student who lives in Alex or Cairo. 
+4.	 Create a view “V1” that displays student data for student who lives in Alex or Cairo. 
 Note: Prevent the users to run the following query 
 Update V1 set st_address=’tanta’
 Where st_address=’alex’;
@@ -58,3 +58,63 @@ with check option
 Select * from ShowStudent
 Update ShowStudent set St_Fname='nn' WHERE st_address='tanta'
 GO
+/*
+5.	Create index on column (Hiredate) that allow u to cluster the data
+ in table Department. What will happen?
+*/
+Create NONCLUSTERED index index_Hiredate 
+on Department(Manager_hiredate)  
+GO
+/*
+6.Create index that allow u to enter unique 
+ages in student table. What will happen?
+*/
+Create unique index Age_Student
+on Student(St_Age)
+GO
+use [SD32-Company]
+GO
+/*
+7.	Create temporary table [Session based] on Company DB to 
+save employee name and his today task.
+*/ 
+Create table  #Employees_Task
+(
+ID int ,
+TODayTask nvarchar(max)
+)
+Select * from #Employees_Task
+/*
+8.	Create a view that will display the project name and the number of 
+employees work on it. “Use Company DB”
+*/
+GO
+Create view vw_SelectProjectNumber
+as
+Select  ProjectName,count(*) as ANumberOfEmployees from Company.Project as prod
+Inner join Works_On as work
+on prod.ProjectNo = work.ProjectNo
+group by ProjectName
+GO
+Select * from vw_SelectProjectNumber
+Go
+/*
+9.	Using Merge statement between the following two 
+tables [User ID, Transaction Amount]
+*/
+--Create 2 tables
+Create table Transaction1(
+UserID int ,
+TransactionAmount decimal(9,2)
+)
+go 
+Create table Transaction2(
+UserID int ,
+TransactionAmount decimal(9,2)
+)
+Go
+Insert into Transaction1 values (1, 1000),(2,2000),(3,1000)
+go
+Insert into Transaction2 values (1, 4000), (4,2000), (2,10000)
+Go
+Merge 
